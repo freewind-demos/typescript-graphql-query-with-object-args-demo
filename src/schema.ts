@@ -6,8 +6,12 @@ const sdlSchema = `
     firstName: String
     lastName: String
   }
+  input AuthorInput {
+    id: Int!
+    bookName: String
+  }
   type Query {
-    author(id: Int!): Author
+    author(input: AuthorInput!): Author
   }
 `;
 
@@ -17,13 +21,13 @@ const schema = makeExecutableSchema({
   typeDefs: sdlSchema,
   resolvers: {
     Query: {
-      author: (_: any, input: { id: number }) => {
-        console.log("### args", input)
-        const id = input.id;
-        if (id === 1) {
+      author: (_: any, args: { input: { id: number, bookName?: string } }) => {
+        console.log('### author', {args});
+        const {id, bookName} = args.input;
+        if (id === 1 && bookName === 'hello') {
           return {firstName: "Ada", lastName: "Lovelace"}
         } else {
-          throw new Error(`Unknown id: ${id}`)
+          throw new Error(`Can't find author`)
         }
       }
     }

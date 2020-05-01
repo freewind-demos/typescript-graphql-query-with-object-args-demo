@@ -1,7 +1,7 @@
-TypeScript GraphQL Parse Schema from String Demo
+TypeScript GraphQL Query with Object Args Demo
 ===========================
 
-通过字符串来定义schema动态转换
+查询的参数是一个object怎么写？
 
 ```
 npm install
