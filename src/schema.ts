@@ -1,17 +1,33 @@
-import {GraphQLSchema, GraphQLObjectType, GraphQLString} from 'graphql';
+import {buildSchema} from 'graphql';
+import {makeExecutableSchema} from 'graphql-tools';
 
-const schema = new GraphQLSchema({
-  query: new GraphQLObjectType({
-    name: 'RootQueryType',
-    fields: {
-      hello: {
-        type: GraphQLString,
-        resolve() {
-          return 'world';
-        },
-      },
-    },
-  }),
+const sdlSchema = `
+  type Author {
+    firstName: String
+    lastName: String
+  }
+  type Query {
+    author(id: Int!): Author
+  }
+`;
+
+// const schema = buildSchema(sdlSchema);
+
+const schema = makeExecutableSchema({
+  typeDefs: sdlSchema,
+  resolvers: {
+    Query: {
+      author: (_: any, input: { id: number }) => {
+        console.log("### args", input)
+        const id = input.id;
+        if (id === 1) {
+          return {firstName: "Ada", lastName: "Lovelace"}
+        } else {
+          throw new Error(`Unknown id: ${id}`)
+        }
+      }
+    }
+  }
 });
 
 export default schema;
